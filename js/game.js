@@ -29,6 +29,10 @@
             this.starfield = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'background');
             this.starfield.fixedToCamera = true;
 
+            //SOUNDS
+
+            this.hit = this.game.add.audio('hit');
+
             this.lifeBar = this.game.add.sprite(10, 10, 'lifebar');
             this.lifeBar.width = 400 - 20;
             var tween2 = this.game.add.tween(this.starfield2);
@@ -117,21 +121,25 @@
                 this.player.sprite.x = -3;
                 this.starfield3.alpha = 1;
                 this.player.alienOut();
+                this.hit.play();
             }
             if (this.player.sprite.x > this.game.width + 5) {
                 this.player.sprite.x = this.game.width + 1;
                 this.starfield3.alpha = 1;
                 this.player.alienOut();
+                this.hit.play();
             }
             if (this.player.sprite.y < -5) {
                 this.player.sprite.y = -1;
                 this.starfield3.alpha = 1;
                 this.player.alienOut();
+                this.hit.play();
             }
             if (this.player.sprite.y > this.game.height + 5) {
                 this.player.sprite.y = this.game.height + 1;
                 this.starfield3.alpha = 1;
                 this.player.alienOut();
+                this.hit.play();
             }
 
         },
@@ -142,6 +150,7 @@
         collisionHandler: function() {
             this.starfield3.alpha = 1;
             this.player.life -= 2;
+            this.hit.play();
             //console.log(this.player.life);
         },
         render: function() {

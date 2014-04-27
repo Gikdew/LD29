@@ -11,12 +11,16 @@ Worm = function(game) {
     this.traces = [];
     this.TWEEN_START = 1000;
     this.tween = true;
+
+    this.canClick = true;
 }
 Worm.prototype = {
     preload: function() {
 
     },
     create: function() {
+
+        this.highSpeed = this.game.add.audio('highspeed');
         this.sprite = this.game.add.sprite(0, 0, 'playerbody');
         this.sprite.alpha = 0;
         this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
@@ -71,11 +75,17 @@ Worm.prototype = {
 
         this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -140));
         if (cursors.up.isDown) {
+            if (this.canClick) {
+                this.highSpeed.play();
+                this.canClick = false;
+            }
 
             this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -260));
 
             //this.fireBullet();
 
+        } else {
+            this.canClick = true;
         }
 
         if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {

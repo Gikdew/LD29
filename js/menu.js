@@ -15,6 +15,7 @@
         create: function() {
             //console.log(this.game.time.now);
             this.player = new Worm1(this.game);
+            this.select = this.game.add.audio('select');
 
             var x = this.game.width / 2,
                 y = this.game.height / 2;
@@ -34,7 +35,7 @@
                 alpha: 0
             }, 4000, Phaser.Easing.Linear.Out, true, 0, 10000000000, true);
 
-            this.titleTxt = this.add.bitmapText(x, y - 180, 'minecraftia', 'WATTER WORMS', 50);
+            this.titleTxt = this.add.bitmapText(x, y - 180, 'minecraftia', 'WRIGGLE WORM', 50);
             this.titleTxt.align = 'center';
             this.titleTxt.x = this.game.width / 2 - this.titleTxt.textWidth / 2;
 
@@ -83,6 +84,7 @@
 
         onDown: function() {
             this.game.state.start('game');
+            this.select.play();
         }
     };
 

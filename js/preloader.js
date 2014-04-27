@@ -21,11 +21,9 @@
             this.game.load.audio('highspeed', ['assets/sounds/highspeed.mp3', 'assets/sounds/highspeed.ogg']);
             this.game.load.audio('select', ['assets/sounds/select.mp3', 'assets/sounds/select.ogg']);
 
-            this.game.load.audio('music', ['assets/sounds/music.mp3', 'assets/sounds/music.ogg']);
+            //this.game.load.audio('music', ['assets/sounds/music.mp3', 'assets/sounds/music.ogg']);
 
             this.load.image('playerbody', 'assets/playerbody.png');
-            this.load.image('trace', 'assets/trace.png');
-            this.load.image('bullet', 'assets/bullet1.png');
             this.load.image('enemie', 'assets/enemie.png');
             this.load.image('enemie1', 'assets/enemie1.png');
             this.load.image('enemie2', 'assets/enemie2.png');
