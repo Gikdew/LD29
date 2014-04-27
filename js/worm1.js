@@ -1,6 +1,6 @@
-Worm = function(game) {
+Worm1 = function(game) {
     this.game = game;
-    this.numSnakeSections = 10;
+    this.numSnakeSections = 40;
     this.snakeSection = [];
     this.snakeSpacer = 1;
     this.snakePath = [];
@@ -12,12 +12,12 @@ Worm = function(game) {
     this.TWEEN_START = 1000;
     this.tween = true;
 }
-Worm.prototype = {
+Worm1.prototype = {
     preload: function() {
 
     },
     create: function() {
-        this.sprite = this.game.add.sprite(0, 0, 'playerbody');
+        this.sprite = this.game.add.sprite(this.game.width / 2 - 65, this.game.height / 2 + 50, 'playerbody');
         this.sprite.alpha = 0;
         this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
         this.sprite.smoothed = true;
@@ -29,7 +29,7 @@ Worm.prototype = {
             this.snakePath[i] = new Phaser.Point(this.sprite.x, this.sprite.y);
         }
         for (var i = 1; i <= this.numSnakeSections - 1; i++) {
-            this.scaleCounter -= 0.060;
+            this.scaleCounter -= 0.015;
             this.snakeSection[i] = this.game.add.sprite(this.sprite.x, this.sprite.y,
                 'playerbody');
             this.snakeSection[i].smoothed = true;
@@ -60,7 +60,7 @@ Worm.prototype = {
         var part = this.snakePath.pop();
 
         part.setTo(this.sprite.x, this.sprite.y);
-
+        this.sprite.body.angularVelocity = -200;
         this.snakePath.unshift(part);
 
         for (var i = 1; i <= this.numSnakeSections - 1; i++) {
@@ -69,25 +69,7 @@ Worm.prototype = {
             this.snakeSection[i].y = (this.snakePath[i * this.snakeSpacer]).y;
         }
 
-        this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -140));
-        if (cursors.up.isDown) {
-
-            this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -260));
-
-            //this.fireBullet();
-
-        }
-
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-            this.sprite.body.angularVelocity = -350;
-        }
-        if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-            this.sprite.body.angularVelocity = 350;
-        }
-
-        if (this.sprite.x < -5 || this.sprite.x > 400 + 5 || this.sprite.y < -5 || this.sprite.y > 500 + 5) {
-            this.alienOut();
-        }
+        this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -300));
 
     },
     fireBullet: function() {

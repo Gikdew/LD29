@@ -9,6 +9,8 @@ Enemie = function(game) {
     this.bulletTime = 150;
     this.targetAngle = 0;
     this.sprite = null;
+    this.tween = true;
+    this.TWEEN_START = 1000;
 }
 
 Enemie.prototype = {
@@ -97,6 +99,20 @@ Enemie.prototype = {
 
         this.rnd = Math.random() * 0.5 + 0.5;
         this.sprite.y = p.y;
+    },
+    die: function() {
+        if (this.tween) {
+            this.game.add.tween(this.sprite.scale).to({
+                x: 0,
+                y: 0
+            }, this.TWEEN_START, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
+            for (var i = 1; i < this.numSnakeSections; i++) {
+                this.game.add.tween(this.snakeSection[i].scale).to({
+                    x: 0,
+                    y: 0
+                }, this.TWEEN_START, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
+            }
+        }
     }
 
 }

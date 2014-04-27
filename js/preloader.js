@@ -9,8 +9,9 @@
     Preloader.prototype = {
 
         preload: function() {
-            this.asset = this.add.sprite(320, 240, 'preloader');
+            this.asset = this.add.sprite(0, this.game.height / 2, 'preloader');
             this.asset.anchor.setTo(0.5, 0.5);
+            this.game.stage.backgroundColor = "#B8D0DE";
 
             this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
             this.load.setPreloadSprite(this.asset);
@@ -22,6 +23,9 @@
             this.load.image('enemie', 'assets/enemie.png');
             this.load.image('enemie1', 'assets/enemie1.png');
             this.load.image('enemie2', 'assets/enemie2.png');
+            this.load.image('lifebar', 'assets/lifebar.png');
+
+            this.load.image('flash', 'assets/flash.png');
 
             this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
             this.load.image('background', 'assets/color.png');
@@ -34,7 +38,7 @@
 
         update: function() {
             if ( !! this.ready) {
-                this.game.state.start('game');
+                this.game.state.start('menu');
             }
         },
 

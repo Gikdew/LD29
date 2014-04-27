@@ -26,6 +26,8 @@
             this.starfield = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'background');
             this.starfield.fixedToCamera = true;
 
+            this.lifeBar = this.game.add.sprite(10, 10, 'lifebar');
+            this.lifeBar.width = 400 - 20;
             var tween2 = this.game.add.tween(this.starfield2);
             tween2.to({
                 alpha: 0
@@ -48,10 +50,26 @@
                 //console.log(this.points[i])
                 this.enemies[i].create(this.points[Math.floor(Math.random() * this.numOfPoints)], Math.random() + 0.5);
             }
+            this.starfield3 = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'flash');
+            this.starfield3.fixedToCamera = true;
+            this.starfield3.alpha = 0;
 
         },
 
         update: function() {
+            this.starfield3.alpha = 0;
+
+            if (this.player.life >= 70) {
+                this.lifeBar.width = this.player.life * 3.80;
+            } else {
+                this.lifeBar.width = 0;
+                this.player.die();
+                for (var i = 0; i < this.numOfEnemies; i++) {
+                    this.enemies[i].die();
+                    this.enemies[i].tween = false;
+                }
+                this.player.tween = false;
+            }
 
             if (this.game.time.now > this.changePoint) {
                 this.changePoint = this.game.time.now + 10;
@@ -66,7 +84,8 @@
                 this.enemies[i].update(this.actualPoint);
                 this.game.physics.arcade.collide(this.player.sprite, this.enemies[i].sprite, this.collisionHandler, null, this);
                 for (var j = 0; j < this.player.numSnakeSections; j++) {
-                    this.game.physics.arcade.collide(this.player.snakeSection[j], this.enemies[i].sprite, this.collisionHandler, null,
+                    this.game.physics.arcade.collide(this.player.snakeSection[j], this.enemies[i].sprite, this.collisionHandler,
+                        null,
                         this);
                 }
 
@@ -78,6 +97,7 @@
 
         },
         collisionHandler: function() {
+            this.starfield3.alpha = 1;
             this.player.life -= 2;
             console.log(this.player.life);
         },
@@ -88,7 +108,7 @@
             }*/
 
             this.game.debug.text(this.time.fps, 32, 32);
-            //this.game.debug.spriteInfo(this.enemie.sprite, 32, 50);
+            this.game.debug.spriteInfo(this.player.sprite, 32, 50);
         }
 
     };
