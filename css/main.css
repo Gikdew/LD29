@@ -1,0 +1,9 @@
+* {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.game {
+	width: 950px;
+	height: 500px;
+}
