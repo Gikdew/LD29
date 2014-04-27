@@ -15,7 +15,6 @@
 
             this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
             this.load.setPreloadSprite(this.asset);
-            this.load.image('player', 'assets/player.png');
 
             this.game.load.audio('hit', ['assets/sounds/hit.mp3', 'assets/sounds/hit.ogg']);
             this.game.load.audio('highspeed', ['assets/sounds/highspeed.mp3', 'assets/sounds/highspeed.ogg']);

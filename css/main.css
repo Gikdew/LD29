@@ -2,6 +2,11 @@
   -webkit-user-select: none;
   user-select: none;
 }
+body{
+	border:0;
+	padding:0;
+	margin:0;
+}
 
 .game {
 	width: 400px;
