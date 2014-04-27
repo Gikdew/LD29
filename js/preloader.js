@@ -21,7 +21,7 @@
             this.game.load.audio('highspeed', ['assets/sounds/highspeed.mp3', 'assets/sounds/highspeed.ogg']);
             this.game.load.audio('select', ['assets/sounds/select.mp3', 'assets/sounds/select.ogg']);
 
-            //this.game.load.audio('music', ['assets/sounds/music.mp3', 'assets/sounds/music.ogg']);
+            this.game.load.audio('music', ['assets/sounds/music.mp3', 'assets/sounds/music.ogg']);
 
             this.load.image('playerbody', 'assets/playerbody.png');
             this.load.image('enemie', 'assets/enemie.png');
@@ -39,6 +39,8 @@
         },
 
         create: function() {
+            this.music = this.game.add.audio('music', 1, true);
+            this.music.play('', 0, 1, true);
             this.asset.cropEnabled = false;
         },
 

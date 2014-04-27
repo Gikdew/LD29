@@ -9,7 +9,7 @@ Worm1 = function(game) {
     this.bulletTime = 150;
     this.life = 100;
     this.traces = [];
-    this.TWEEN_START = 1000;
+    this.TWEEN_START = 700;
     this.tween = true;
 }
 Worm1.prototype = {
@@ -35,6 +35,10 @@ Worm1.prototype = {
             this.snakeSection[i].smoothed = true;
             this.snakeSection[i].scale.setTo(this.scaleCounter);
             this.snakeSection[i].anchor.setTo(0.5, 0.5);
+            this.snakeSection[i].alpha = 0;
+            this.game.add.tween(this.snakeSection[i]).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 200, 0, true);
         }
 
         /*this.bullets = this.game.add.group();
@@ -112,6 +116,13 @@ Worm1.prototype = {
                     y: 0
                 }, this.TWEEN_START, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
             }
+        }
+    },
+    animationOff: function() {
+        for (var i = 1; i < this.numSnakeSections; i++) {
+            this.game.add.tween(this.snakeSection[i]).to({
+                alpha: 0
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
         }
     }
 }

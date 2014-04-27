@@ -5,11 +5,12 @@ Worm = function(game) {
     this.snakeSpacer = 1;
     this.snakePath = [];
     this.scaleCounter = 1;
-    this.wobble;
+    this.wobble = 0;
     this.bulletTime = 150;
     this.life = 100;
     this.traces = [];
     this.TWEEN_START = 1000;
+    this.TWEEN_FINISH = 1500;
     this.tween = true;
 
     this.canClick = true;
@@ -39,6 +40,10 @@ Worm.prototype = {
             this.snakeSection[i].smoothed = true;
             this.snakeSection[i].scale.setTo(this.scaleCounter);
             this.snakeSection[i].anchor.setTo(0.5, 0.5);
+            this.snakeSection[i].alpha = 0;
+            this.game.add.tween(this.snakeSection[i]).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 200, 0, true);
         }
 
         /*this.bullets = this.game.add.group();
@@ -73,14 +78,14 @@ Worm.prototype = {
             this.snakeSection[i].y = (this.snakePath[i * this.snakeSpacer]).y;
         }
 
-        this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -140));
+        this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -190));
         if (cursors.up.isDown) {
             if (this.canClick) {
                 this.highSpeed.play();
                 this.canClick = false;
             }
 
-            this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -260));
+            this.sprite.body.velocity.copyFrom(this.game.physics.arcade.velocityFromAngle(this.sprite.angle, -300));
 
             //this.fireBullet();
 
@@ -121,20 +126,18 @@ Worm.prototype = {
     },
     die: function() {
         if (this.tween) {
-            this.tween = this.game.add.tween(this.sprite.scale);
+            this.tween = this.game.add.tween(this.sprite);
             this.tween.to({
-                x: 0,
-                y: 0
-            }, this.TWEEN_START, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
+                alpha: 0
+            }, this.TWEEN_FINISH, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
             this.tween.onComplete.add(function() {
                 this.game.state.start('menu', false, false);
             }, this);
 
             for (var i = 1; i < this.numSnakeSections; i++) {
-                this.game.add.tween(this.snakeSection[i].scale).to({
-                    x: 0,
-                    y: 0
-                }, this.TWEEN_START, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
+                this.game.add.tween(this.snakeSection[i]).to({
+                    alpha: 0
+                }, this.TWEEN_FINISH, Phaser.Easing.Sinusoidal.Out, true, 0, 0, true);
             }
         }
     }

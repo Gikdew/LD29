@@ -14,12 +14,15 @@
         this.starfield;
         this.starfield2;
         this.scoreText = null;
-
+        this.timer;
+        this.timer1;
+        this.delay = 1500;
     }
 
     Game.prototype = {
 
         create: function() {
+            this.restart();
             this.player = new Worm(this.game);
             this.score = 0;
             this.enemie = new Enemie(this.game);
@@ -28,9 +31,8 @@
             this.starfield2.fixedToCamera = true;
             this.starfield = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'background');
             this.starfield.fixedToCamera = true;
-
+            this.delay = this.game.time.now + 1000;
             //SOUNDS
-
             this.hit = this.game.add.audio('hit');
 
             this.lifeBar = this.game.add.sprite(10, 10, 'lifebar');
@@ -53,10 +55,12 @@
                 this.points[i] = new Phaser.Point(Math.random() * 20 + this.game.world.width, i * 10);
             }
 
+            this.numOfEnemies = 13;
             for (var i = 0; i < this.numOfEnemies; i++) {
                 this.enemies[i] = new Enemie(this.game);
                 //console.log(this.points[i])
                 this.enemies[i].create(this.points[Math.floor(Math.random() * this.numOfPoints)], Math.random() + 0.5);
+
             }
             this.starfield3 = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'flash');
             this.starfield3.fixedToCamera = true;
@@ -66,18 +70,37 @@
             this.timer.start();
             this.timer.loop(100, this.socreTimer, this);
 
+            this.timer1 = this.game.time.events;
+            this.timer1.start();
+            this.timer1.loop(7000, this.enemieTimer, this);
+
             this.scoreText = this.add.bitmapText(this.game.width / 2, 30, 'minecraftia', this.score.toString(),
                 50);
             this.scoreText.align = 'center';
             this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2;
+
+            this.lifeBar.alpha = 0;
+            this.game.add.tween(this.lifeBar).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+
+            this.scoreText.alpha = 0;
+            this.game.add.tween(this.scoreText).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
 
         },
         socreTimer: function() {
             //console.log(this.score);
             this.score += 1;
         },
-
+        enemieTimer: function() {
+            this.numOfEnemies++;
+            this.enemies[this.numOfEnemies - 1] = new Enemie(this.game);
+            this.enemies[this.numOfEnemies - 1].create(this.points[Math.floor(Math.random() * this.numOfPoints)], Math.random() + 0.5);
+        },
         update: function() {
+            //console.log(this.enemies.length);
             this.starfield3.alpha = 0;
 
             if (this.player.life >= 0) {
@@ -104,21 +127,22 @@
             }
             this.player.update(this.cursors);
             //this.enemie.update(this.actualPoint);
+            if (this.game.time.now > this.delay) {
+                for (var i = 0; i < this.numOfEnemies; i++) {
+                    this.enemies[i].update(this.actualPoint);
+                    this.game.physics.arcade.collide(this.player.sprite, this.enemies[i].sprite, this.collisionHandler, null, this);
+                    for (var j = 0; j < this.player.numSnakeSections; j++) {
+                        this.game.physics.arcade.collide(this.player.snakeSection[j], this.enemies[i].sprite, this.collisionHandler,
+                            null,
+                            this);
+                    }
 
-            for (var i = 0; i < this.numOfEnemies; i++) {
-                this.enemies[i].update(this.actualPoint);
-                this.game.physics.arcade.collide(this.player.sprite, this.enemies[i].sprite, this.collisionHandler, null, this);
-                for (var j = 0; j < this.player.numSnakeSections; j++) {
-                    this.game.physics.arcade.collide(this.player.snakeSection[j], this.enemies[i].sprite, this.collisionHandler,
-                        null,
-                        this);
                 }
-
             }
 
             //COLLIDE WITH WORLD BOUNDS
             if (this.player.sprite.x < -5) {
-                this.player.sprite.x = -3;
+                this.player.sprite.x = -1;
                 this.starfield3.alpha = 1;
                 this.player.alienOut();
                 this.hit.play();
@@ -172,6 +196,22 @@
         },
         getHighscore: function() {
             return localStorage.getItem("highscoreWW");
+        },
+        restart: function() {
+            this.player = null;
+            this.enemie = null;
+            this.points = [];
+            this.numOfPoints = 100;
+            this.actualPoint;
+            this.changePoint = 0;
+            this.enemies = [];
+            this.numOfEnemies = 13;
+
+            this.starfield;
+            this.starfield2;
+            this.scoreText = null;
+            this.timer;
+            this.timer1;
         }
 
     };

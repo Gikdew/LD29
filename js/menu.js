@@ -8,11 +8,13 @@
         this.starfield2 = null;
         this.player;
         this.delay = 3000;
+        this.TWEEN_START = 700;
     }
 
     Menu.prototype = {
 
         create: function() {
+            this.canClick = true;
             //console.log(this.game.time.now);
             this.player = new Worm1(this.game);
             this.select = this.game.add.audio('select');
@@ -60,9 +62,29 @@
             this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 
             this.player.create();
+            this.instruction = this.game.add.sprite(this.game.width / 2, 420, 'instructions');
 
-            this.game.add.sprite(this.game.width / 2, 420, 'instructions').anchor.setTo(0.5, 0.5);
+            this.instruction.anchor.setTo(0.5, 0.5);
+            this.instruction.alpha = 0;
+            this.game.add.tween(this.instruction).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
 
+            this.titleTxt.alpha = 0;
+            this.game.add.tween(this.titleTxt).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+
+            this.titleTxt1.alpha = 0;
+            this.game.add.tween(this.titleTxt1).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+
+            this.titleTxt2.alpha = 0;
+            this.game.add.tween(this.titleTxt2).to({
+                alpha: 1
+            }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+            this.canClick = true;
         },
 
         getHighscore: function() {
@@ -83,8 +105,31 @@
         },
 
         onDown: function() {
-            this.game.state.start('game');
-            this.select.play();
+            if (this.canClick) {
+                this.select.play();
+                this.player.animationOff();
+                this.game.add.tween(this.instruction).to({
+                    alpha: 0
+                }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+
+                this.game.add.tween(this.titleTxt).to({
+                    alpha: 0
+                }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+
+                this.game.add.tween(this.titleTxt1).to({
+                    alpha: 0
+                }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+
+                var tween = this.game.add.tween(this.titleTxt2);
+                tween.to({
+                    alpha: 0
+                }, this.TWEEN_START, Phaser.Easing.Linear.Out, true, 0, 0, true);
+                tween.onComplete.add(function() {
+                    this.game.state.start('game');
+                }, this);
+                this.canClick = false;
+            }
+
         }
     };
 
