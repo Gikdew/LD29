@@ -17,7 +17,7 @@ Worm1.prototype = {
 
     },
     create: function() {
-        this.sprite = this.game.add.sprite(this.game.width / 2 - 65, this.game.height / 2 + 50, 'playerbody');
+        this.sprite = this.game.add.sprite(this.game.width / 2 - 70, this.game.height / 2 + 50, 'playerbody');
         this.sprite.alpha = 0;
         this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
         this.sprite.smoothed = true;

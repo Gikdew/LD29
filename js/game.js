@@ -13,14 +13,15 @@
 
         this.starfield;
         this.starfield2;
+        this.scoreText = null;
 
-        this.score = 0;
     }
 
     Game.prototype = {
 
         create: function() {
             this.player = new Worm(this.game);
+            this.score = 0;
             this.enemie = new Enemie(this.game);
             this.game.world.setBounds(-20, -20, 440, 540);
             this.starfield2 = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'background1');
@@ -38,6 +39,7 @@
             tween1.to({
                 alpha: 0
             }, 4000, Phaser.Easing.Linear.Out, true, 0, 10000000000, true);
+
             this.player.create();
             this.cursors = this.game.input.keyboard.createCursorKeys();
             this.game.time.advancedTiming = true;
@@ -56,9 +58,19 @@
             this.starfield3.fixedToCamera = true;
             this.starfield3.alpha = 0;
 
-        },
-        socoreTimer: function() {
+            this.timer = this.game.time.events;
+            this.timer.start();
+            this.timer.loop(100, this.socreTimer, this);
 
+            this.scoreText = this.add.bitmapText(this.game.width / 2, 30, 'minecraftia', this.score.toString(),
+                50);
+            this.scoreText.align = 'center';
+            this.scoreText.x = this.game.width / 2 - this.scoreText.textWidth / 2;
+
+        },
+        socreTimer: function() {
+            //console.log(this.score);
+            this.score += 1;
         },
 
         update: function() {
@@ -66,10 +78,13 @@
 
             if (this.player.life >= 0) {
                 this.lifeBar.width = this.player.life * 3.80;
+                this.scoreText.setText(this.score.toString());
+
             } else {
                 this.lifeBar.width = 0;
                 this.player.die();
                 this.saveHighScore();
+                this.scoreText.setText("");
                 for (var i = 0; i < this.numOfEnemies; i++) {
                     this.enemies[i].die();
                     this.enemies[i].tween = false;
@@ -97,6 +112,28 @@
 
             }
 
+            //COLLIDE WITH WORLD BOUNDS
+            if (this.player.sprite.x < -5) {
+                this.player.sprite.x = -3;
+                this.starfield3.alpha = 1;
+                this.player.alienOut();
+            }
+            if (this.player.sprite.x > this.game.width + 5) {
+                this.player.sprite.x = this.game.width + 1;
+                this.starfield3.alpha = 1;
+                this.player.alienOut();
+            }
+            if (this.player.sprite.y < -5) {
+                this.player.sprite.y = -1;
+                this.starfield3.alpha = 1;
+                this.player.alienOut();
+            }
+            if (this.player.sprite.y > this.game.height + 5) {
+                this.player.sprite.y = this.game.height + 1;
+                this.starfield3.alpha = 1;
+                this.player.alienOut();
+            }
+
         },
 
         onInputDown: function() {
@@ -113,8 +150,8 @@
                 this.game.context.fillRect(this.points[i].x, this.points[i].y, 4, 4);
             }*/
 
-            this.game.debug.text(this.time.fps, 32, 32);
-            this.game.debug.spriteInfo(this.player.sprite, 32, 50);
+            //this.game.debug.text(this.time.fps, 32, 32);
+            //this.game.debug.spriteInfo(this.player.sprite, 32, 50);
         },
         saveHighScore: function() {
             if (this.score > localStorage.getItem("highscoreWW")) {

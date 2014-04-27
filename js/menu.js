@@ -7,6 +7,7 @@
         this.starfield = null;
         this.starfield2 = null;
         this.player;
+        this.delay = 3000;
     }
 
     Menu.prototype = {
@@ -17,6 +18,8 @@
 
             var x = this.game.width / 2,
                 y = this.game.height / 2;
+
+            this.delay = this.game.time.now + 1000;
 
             this.starfield2 = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'background1');
             this.starfield2.fixedToCamera = true;
@@ -36,9 +39,9 @@
             this.titleTxt.x = this.game.width / 2 - this.titleTxt.textWidth / 2;
 
             if (this.getHighscore() == null) {
-                this.titleTxt1 = this.add.bitmapText(x, y - 7, 'minecraftia', '0', 50);
+                this.titleTxt1 = this.add.bitmapText(x, y, 'minecraftia', '0', 50);
             } else {
-                this.titleTxt1 = this.add.bitmapText(x, y - 7, 'minecraftia', this.getHighscore().toString(), 30);
+                this.titleTxt1 = this.add.bitmapText(x, y, 'minecraftia', this.getHighscore().toString(), 50);
             }
 
             this.titleTxt1.align = 'center';
@@ -66,9 +69,10 @@
         },
 
         update: function() {
-
-            if (this.upKey.isDown || this.downKey.isDown || this.leftKey.isDown || this.rightKey.isDown) {
-                this.onDown();
+            if (this.game.time.now > this.delay) {
+                if (this.upKey.isDown || this.downKey.isDown || this.leftKey.isDown || this.rightKey.isDown) {
+                    this.onDown();
+                }
             }
             this.player.update();
 

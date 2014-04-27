@@ -85,10 +85,6 @@ Worm.prototype = {
             this.sprite.body.angularVelocity = 350;
         }
 
-        if (this.sprite.x < -5 || this.sprite.x > 400 + 5 || this.sprite.y < -5 || this.sprite.y > 500 + 5) {
-            this.alienOut();
-        }
-
     },
     fireBullet: function() {
         if (this.game.time.now > this.bulletTime) {

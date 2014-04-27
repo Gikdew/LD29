@@ -11,11 +11,17 @@
         preload: function() {
             this.asset = this.add.sprite(0, this.game.height / 2, 'preloader');
             this.asset.anchor.setTo(0.5, 0.5);
-            this.game.stage.backgroundColor = "#2192A0";
+            this.game.stage.backgroundColor = "#267498";
 
             this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
             this.load.setPreloadSprite(this.asset);
             this.load.image('player', 'assets/player.png');
+
+            this.game.load.audio('hit', ['assets/sounds/hit.mp3', 'assets/sounds/hit.ogg']);
+            this.game.load.audio('highspeed', ['assets/sounds/highspeed.mp3', 'assets/sounds/highspeed.ogg']);
+            this.game.load.audio('select', ['assets/sounds/select.mp3', 'assets/sounds/select.ogg']);
+
+            this.game.load.audio('music', ['assets/sounds/music.mp3', 'assets/sounds/music.ogg']);
 
             this.load.image('playerbody', 'assets/playerbody.png');
             this.load.image('trace', 'assets/trace.png');
@@ -31,6 +37,7 @@
             this.load.bitmapFont('minecraftia', 'assets/font.png', 'assets/font.fnt');
             this.load.image('background', 'assets/color.png');
             this.load.image('background1', 'assets/color4.png');
+
         },
 
         create: function() {
