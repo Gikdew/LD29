@@ -12,6 +12,7 @@
     Menu.prototype = {
 
         create: function() {
+            //console.log(this.game.time.now);
             this.player = new Worm1(this.game);
 
             var x = this.game.width / 2,
@@ -30,17 +31,45 @@
                 alpha: 0
             }, 4000, Phaser.Easing.Linear.Out, true, 0, 10000000000, true);
 
-            this.titleTxt = this.add.bitmapText(x, y - 180, 'minecraftia', 'Watter Worms');
+            this.titleTxt = this.add.bitmapText(x, y - 180, 'minecraftia', 'WATTER WORMS', 50);
             this.titleTxt.align = 'center';
             this.titleTxt.x = this.game.width / 2 - this.titleTxt.textWidth / 2;
 
+            if (this.getHighscore() == null) {
+                this.titleTxt1 = this.add.bitmapText(x, y - 7, 'minecraftia', '0', 50);
+            } else {
+                this.titleTxt1 = this.add.bitmapText(x, y - 7, 'minecraftia', this.getHighscore().toString(), 30);
+            }
+
+            this.titleTxt1.align = 'center';
+            this.titleTxt1.x = this.game.width / 2 - this.titleTxt1.textWidth / 2;
+
+            this.titleTxt2 = this.add.bitmapText(x, y - 40, 'minecraftia', 'HighScore', 30);
+            this.titleTxt2.align = 'center';
+            this.titleTxt2.x = this.game.width / 2 - this.titleTxt2.textWidth / 2;
+
+            //INPUT
             this.input.onDown.add(this.onDown, this);
+            this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+            this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+            this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+            this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+
             this.player.create();
 
+            this.game.add.sprite(this.game.width / 2, 420, 'instructions').anchor.setTo(0.5, 0.5);
+
+        },
+
+        getHighscore: function() {
+            return localStorage.getItem("highscoreWW");
         },
 
         update: function() {
 
+            if (this.upKey.isDown || this.downKey.isDown || this.leftKey.isDown || this.rightKey.isDown) {
+                this.onDown();
+            }
             this.player.update();
 
         },

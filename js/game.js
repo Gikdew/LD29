@@ -13,6 +13,8 @@
 
         this.starfield;
         this.starfield2;
+
+        this.score = 0;
     }
 
     Game.prototype = {
@@ -55,15 +57,19 @@
             this.starfield3.alpha = 0;
 
         },
+        socoreTimer: function() {
+
+        },
 
         update: function() {
             this.starfield3.alpha = 0;
 
-            if (this.player.life >= 70) {
+            if (this.player.life >= 0) {
                 this.lifeBar.width = this.player.life * 3.80;
             } else {
                 this.lifeBar.width = 0;
                 this.player.die();
+                this.saveHighScore();
                 for (var i = 0; i < this.numOfEnemies; i++) {
                     this.enemies[i].die();
                     this.enemies[i].tween = false;
@@ -99,7 +105,7 @@
         collisionHandler: function() {
             this.starfield3.alpha = 1;
             this.player.life -= 2;
-            console.log(this.player.life);
+            //console.log(this.player.life);
         },
         render: function() {
             /*for (var i = 0; i < this.numOfPoints; i++) {
@@ -109,6 +115,17 @@
 
             this.game.debug.text(this.time.fps, 32, 32);
             this.game.debug.spriteInfo(this.player.sprite, 32, 50);
+        },
+        saveHighScore: function() {
+            if (this.score > localStorage.getItem("highscoreWW")) {
+                localStorage.setItem("highscoreWW", this.score);
+                //console.log("HighScore!" + localStorage.getItem("highscore"));
+                return true;
+            }
+
+        },
+        getHighscore: function() {
+            return localStorage.getItem("highscoreWW");
         }
 
     };
