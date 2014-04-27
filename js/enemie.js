@@ -1,17 +1,17 @@
-Enemie = function(game) {
+var Enemie = function(game) {
     this.game = game;
     this.numSnakeSections = 10;
     this.snakeSection = [];
     this.snakeSpacer = 2;
     this.snakePath = [];
     this.scaleCounter = 1;
-    this.wobble;
+    this.wobble = 0;
     this.bulletTime = 150;
     this.targetAngle = 0;
     this.sprite = null;
     this.tween = true;
     this.TWEEN_START = 1000;
-}
+};
 
 Enemie.prototype = {
     preload: function() {
@@ -115,4 +115,4 @@ Enemie.prototype = {
         }
     }
 
-}
+};
